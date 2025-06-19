@@ -1,9 +1,9 @@
-package com.client.ws.rasmooplus.integration.impl;
+package com.client.ws.rasmooplus.impl;
 
+import com.client.ws.rasmooplus.WsRasPayIntegration;
 import com.client.ws.rasmooplus.dto.wsraspay.CustomerDto;
 import com.client.ws.rasmooplus.dto.wsraspay.OrderDto;
 import com.client.ws.rasmooplus.dto.wsraspay.PaymentDto;
-import com.client.ws.rasmooplus.integration.WsRasPayIntegration;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;

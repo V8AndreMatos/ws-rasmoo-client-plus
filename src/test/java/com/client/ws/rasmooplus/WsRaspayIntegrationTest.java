@@ -1,4 +1,4 @@
-package com.client.ws.rasmooplus.integration;
+package com.client.ws.rasmooplus;
 
 import com.client.ws.rasmooplus.dto.wsraspay.CustomerDto;
 import org.junit.jupiter.api.Test;

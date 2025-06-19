@@ -2,7 +2,6 @@ package com.client.ws.rasmooplus.services;
 
 import com.client.ws.rasmooplus.dto.SubscriptionTypeDto;
 import com.client.ws.rasmooplus.model.SubscriptionType;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
