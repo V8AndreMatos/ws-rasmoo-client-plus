@@ -1,19 +1,33 @@
-package com.client.ws.rasmooplus.impl;
+package com.client.ws.rasmooplus.integration.impl;
 
 import com.client.ws.rasmooplus.WsRasPayIntegration;
 import com.client.ws.rasmooplus.dto.wsraspay.CustomerDto;
 import com.client.ws.rasmooplus.dto.wsraspay.OrderDto;
 import com.client.ws.rasmooplus.dto.wsraspay.PaymentDto;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Base64;
+import org.apache.tomcat.util.codec.binary.Base64;
 
 @Component
 public class WsRasPayIntegrationImpl implements WsRasPayIntegration {
+
+    @Value("${webservices.raspay.host}")
+    private String raspayHost ;
+
+    @Value("${webservices.raspay.v1.customer}")
+    private String customerUrl ;
+
+    @Value("${webservices.raspay.v1.order}")
+    private String orderUrl ;
+
+    @Value("${webservices.raspay.v1.payment}")
+    private String paymentUrl ;
 
     private final RestTemplate restTemplate;
     private final HttpHeaders httpHeaders;
@@ -24,13 +38,13 @@ public class WsRasPayIntegrationImpl implements WsRasPayIntegration {
             try {
 
                 String credential = "rasmooplus:r@sm00";
-                String base64 = new String(Base64.getEncoder(credential.getBytes()));
+                String base64 = new String(Base64.encodeBase64(credential.getBytes(), false));
                 httpHeaders.add("Authorization" , "Basic "+base64);
                 HttpEntity<CustomerDto> request = new HttpEntity<>(dto , this.httpHeaders);
-                restTemplate.exchange("http://localhost:8081/es-raspay/v1/customer",
+               ResponseEntity<CustomerDto> response = restTemplate.exchange(raspayHost+customerUrl,
                         HttpMethod.POST, request, CustomerDto.class);
 
-                return response.getbody();
+                return response.getBody();
 
             }catch (Exception e){
                 throw e ;
@@ -51,10 +65,10 @@ public class WsRasPayIntegrationImpl implements WsRasPayIntegration {
         try {
 
            HttpEntity<OrderDto> request = new HttpEntity<>(dto , this.httpHeaders);
-            restTemplate.exchange("http://localhost:8081/es-raspay/v1/customer",
-                    HttpMethod.POST, request, CustomerDto.class);
+            ResponseEntity<OrderDto> response = restTemplate.exchange(raspayHost+orderUrl,
+                    HttpMethod.POST, request, OrderDto.class);
 
-            return response.getbody();
+            return response.getBody();
 
         }catch (Exception e){
             throw e ;
@@ -64,13 +78,24 @@ public class WsRasPayIntegrationImpl implements WsRasPayIntegration {
 
     @Override
     public Boolean processPayment(PaymentDto dto) {
-        return null;
+        try {
+
+            HttpEntity<PaymentDto> request = new HttpEntity<>(dto , this.httpHeaders);
+            ResponseEntity<Boolean> response = restTemplate.exchange(raspayHost+paymentUrl,
+                    HttpMethod.POST, request, Boolean.class);
+
+            return response.getBody();
+
+        }catch (Exception e){
+            throw e ;
+
+        }
     }
 
     private static HttpHeaders getHttpHeaders() {
         HttpHeaders httpHeaders = new HttpHeaders();
         String credential = "rasmooplus:r@sm00";
-        String base64 = new String(Base64.getEncoder(credential.getBytes()));
+        String base64 = new String(Base64.encodeBase64(credential.getBytes(), false));
         httpHeaders.add("Authorization" , "Basic "+base64);
         return httpHeaders;
 

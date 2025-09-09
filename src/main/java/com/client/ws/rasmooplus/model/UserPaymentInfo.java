@@ -35,6 +35,9 @@ public class UserPaymentInfo implements Serializable {
     @Column(name = "card_security_code")
     private String cardSecurityCode;
 
+    @Column(name = "installments")
+    private Long installments;
+
     private BigDecimal price;
 
     @Column(name = "dt_payment")
@@ -43,6 +46,5 @@ public class UserPaymentInfo implements Serializable {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
-
 
 }

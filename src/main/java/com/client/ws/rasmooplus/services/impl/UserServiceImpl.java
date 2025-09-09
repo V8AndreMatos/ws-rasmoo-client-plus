@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
             throw new BadRequestException("id deve ser nulo");
       }
 
-       var userTypeOpt = userTypeRepository.findAllById(dto.getUserTypeId());
+       var userTypeOpt = userTypeRepository.findById(dto.getUserTypeId());
 
        if (userTypeOpt.isEmpty()){
             throw new NotFoundException("userTypeId não encontrado");
